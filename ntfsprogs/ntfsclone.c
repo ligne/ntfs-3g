@@ -1958,6 +1958,12 @@ int main(int argc, char **argv)
 
 	parse_options(argc, argv);
 
+#ifdef HAVE_UNISTD_H
+	/* avoid showing a progress-bar unless it's being sent to a terminal */
+	if (!isatty(fileno(msg_out)))
+		opt.quiet++;
+#endif
+
 	utils_set_locale();
 
 	if (opt.restore_image) {
