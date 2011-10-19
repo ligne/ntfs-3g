@@ -337,6 +337,7 @@ static void parse_options(int argc, char **argv)
 #ifdef DEBUG
 		{ "debug",	      no_argument,	 NULL, 'd' },
 #endif
+		{ "quiet",	      no_argument,	 NULL, 'q' },
 		{ "force",	      no_argument,	 NULL, 'f' },
 		{ "help",	      no_argument,	 NULL, 'h' },
 		{ "metadata",	      no_argument,	 NULL, 'm' },
@@ -363,6 +364,9 @@ static void parse_options(int argc, char **argv)
 			break;
 		case 'd':
 			opt.debug++;
+			break;
+		case 'q':
+			opt.quiet++;
 			break;
 		case 'f':
 			opt.force++;
@@ -498,6 +502,9 @@ static void progress_init(struct progress_bar *p, u64 start, u64 stop, int res)
 static void progress_update(struct progress_bar *p, u64 current)
 {
 	float percent = p->unit * current;
+
+	if (opt.quiet)
+		return;
 
 	if (current != p->stop) {
 		if ((current - p->start) % p->resolution)
